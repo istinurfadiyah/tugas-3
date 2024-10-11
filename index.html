@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-g">
+        <Mmeta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Desaku</title>
+            <link rel="stylesheet" href="assets/leaflet.css">
+            <script src="assets/leaflet.js"></script>
+            <script src="art  pejanggik.geojson.js"></script>
+            <script src="line pejanggik.geojson.js"></script>
+            
+            <style>
+                html,body{
+                    height: 100%;
+                    margin: 0;
+                    padding: 0;
+                }
+                #map{
+                    height: 100%;
+                }
+            </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+    //marker pemerintah
+    var desaIcon = L.icon({
+    iconUrl: "assets/images/icon kantor.jpg",
+    iconSize:     [38, 38], 
+    iconAnchor:   [22, 34], 
+    popupAnchor:  [-3, -36] 
+});
+    var kantor_desa = L.marker([-8.749544003772348, 116.32571559667394],{icon:desaIcon}).bindPopup("Kantor Desa batujai");
+    //    kantor_camat = L.marker([-8.617935715585265, 116.38358901205451]).bindPopup("kantor_camat");
+    var Pemerintahan = L.layerGroup([kantor_desa,]);
+
+    // // menampilkan Fasilitas Pendidikan (SD, SMP, SMK, dll)
+    var greenIcon = L.icon({
+    iconUrl: "assets/images/icon sekolah.jpg",
+    iconSize:     [38, 38], 
+    iconAnchor:   [22, 34], 
+    popupAnchor:  [-3, -36] 
+});
+    var sdn1_pejanggik = L.marker([-8.749631780605018, 116.32078638344302],{icon:greenIcon}).bindPopup("SDN 1 pejaggik"),
+       sdn2_pejanggik = L.marker([-8.744461871764386, 116.3267134966738],{icon:greenIcon}).bindPopup("SDN2 pejanggik"),
+       sdn3_pejanggik = L.marker([-8.75173051296618, 116.32672303529506],{icon:greenIcon}).bindPopup("SDN3_pejanggik")
+    var Pendidikan =L.layerGroup([sdn1_pejanggik, sdn2_pejanggik,sdn3_pejanggik]);
+
+    // // menampilkan Fasilitas Ibadah
+    var ibadahIcon = L.icon({
+    iconUrl: "assets/images/icon masjid.jpg",
+    iconSize:     [38, 38], 
+    iconAnchor:   [22, 34], 
+    popupAnchor:  [-3, -36] 
+});
+    var Masjid = L.marker([-8.75189214327146, 116.3262556000507],{icon:ibadahIcon}).bindPopup("MASJIDNURULHUDAPEJANGGIK"),
+       Masjid_karangkedaton = L.marker([-8.746913633112001, 116.3321202730678],{icon:ibadahIcon}).bindPopup("MASJIDKARANGKEDATON")
+    var Ibadah =L.layerGroup([Masjid,Masjid_karangkedaton]);
+
+   
+    const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Made with <i class="fa fa-heart text-danger"></i> by <a href="https://jihadul4kbar.github.io/" target="_blank">Jihadul Akbar</a> &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            });
+        const osmHOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            attribution: 'Made with <i class="fa fa-heart text-danger"></i> by <a href="https://jihadul4kbar.github.io/" target="_blank">Jihadul Akbar</a> &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            });
+        const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Made with <i class="fa fa-heart text-danger"></i> by <a href="https://jihadul4kbar.github.io/" target="_blank">Jihadul Akbar</a> &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+         });
+
+         const map = L.map('map', {
+            center: [-8.7537695,116.3065848], 
+            zoom:15,
+            layers:[osm, Pemerintahan]
+         });
+         const baseMaps = {
+            "Basepeta": osm,
+            "OpenStreetMap.HOT": osmHOT,
+            "Satellite": satellite
+         };
+         const overlayMaps = {
+            "pemerintahan": Pemerintahan,
+            "pendidikan" : Pendidikan,
+            "ibadah" : Ibadah,
+            // "umum" : umum,
+         };
+
+         const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+         var  Pejanggik = L.geoJSON([ Pejanggik], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+	}).addTo(map);
+    
+
+        </script>
+        </body>
+        </html>
